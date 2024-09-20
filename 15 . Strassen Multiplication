@@ -1,0 +1,52 @@
+#include <stdio.h>
+
+#define MAX 4
+
+void strassenMultiply(int mat1[MAX][MAX], int mat2[MAX][MAX], int result[MAX][MAX]) {
+    // Base case
+    if (MAX == 1) {
+        result[0][0] = mat1[0][0] * mat2[0][0];
+        return;
+    }
+
+    // Split matrices
+    int mid = MAX / 2;
+    int mat1a[mid][mid], mat1b[mid][mid], mat1c[mid][mid], mat1d[mid][mid];
+    int mat2a[mid][mid], mat2b[mid][mid], mat2c[mid][mid], mat2d[mid][mid];
+    int resulta[mid][mid], resultb[mid][mid], resultc[mid][mid], resultd[mid][mid];
+
+    // Recursive calls
+    strassenMultiply(mat1a, mat2a, resulta);
+    strassenMultiply(mat1b, mat2c, resultb);
+    strassenMultiply(mat1c, mat2d, resultc);
+    strassenMultiply(mat1d, mat2b, resultd);
+
+    // Combine results
+    for (int i = 0; i < mid; i++) {
+        for (int j = 0; j < mid; j++) {
+            result[i][j] = resulta[i][j] + resultb[i][j];
+            result[i + mid][j] = resultc[i][j] + resultd[i][j];
+            result[i][j + mid] = resulta[i][j] + resultc[i][j];
+            result[i + mid][j + mid] = resultb[i][j] + resultd[i][j];
+        }
+    }
+}
+
+int main() {
+    int mat1[MAX][MAX] = {{1, 2, 3, 4}, {5, 6, 7, 8}, {9, 10, 11, 12}, {13, 14, 15, 16}};
+    int mat2[MAX][MAX] = {{16, 15, 14, 13}, {12, 11, 10, 9}, {8, 7, 6, 5}, {4, 3, 2, 1}};
+    int result[MAX][MAX];
+
+    strassenMultiply(mat1, mat2, result);
+
+    printf("Result:\n");
+    for (int i = 0; i < MAX; i++) {
+        for (int j = 0; j < MAX; j++) {
+            printf("%d ", result[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
+
